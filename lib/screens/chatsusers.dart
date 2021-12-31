@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:async';
 
 import 'package:chattingapp/helper/stoarage_helper.dart';
 import 'package:chattingapp/screens/chatting.dart';
@@ -247,40 +247,8 @@ class _ChatUserState extends State<ChatUser> {
                                 );
                               },
                               child: ListTile(
-                                leading: Expanded(
-                                  child: FutureBuilder(
-                                    future: Storage()
-                                        .downloadedUrl('BMW-X1_ModelCard.png'),
-                                    builder: (BuildContext context,
-                                        AsyncSnapshot<String> snap) {
-                                      if (snap.connectionState ==
-                                              ConnectionState.done &&
-                                          snap.hasData) {
-                                        return Expanded(
-                                          child: ListView.builder(
-                                              itemCount: snap.data!.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      index) {
-                                                return CircleAvatar(
-                                                    child: Image.network(
-                                                  snap.data!,
-                                                ));
-                                              }),
-                                        );
-                                        //Container(width: 300,height: 450,
-                                        // child: Image.network(snap.data!,
-                                        // fit: BoxFit.cover,),
-
-                                      }
-                                      if (snap.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return Center(
-                                            child: CircularProgressIndicator());
-                                      }
-                                      return Container();
-                                    },
-                                  ),
+                                leading: CircleAvatar(
+                                  child: Icon(Icons.beach_access),
                                 ),
                                 title: Text(
                                   data['username'],
@@ -327,6 +295,35 @@ class _ChatUserState extends State<ChatUser> {
                   },
                 ),
               ),
+              // Expanded(
+              //   child: FutureBuilder(
+              //     future: Storage().downloadedUrl('BMW-X1_ModelCard.png'),
+              //     builder: (BuildContext context, AsyncSnapshot<String> snap) {
+              //       if (snap.connectionState == ConnectionState.done &&
+              //           snap.hasData) {
+              //         return Expanded(
+              //           child: ListView.builder(
+              //               itemCount: 1,
+              //               itemBuilder: (BuildContext context, index) {
+              //                 return CircleAvatar(
+              //                   backgroundImage: NetworkImage(
+              //                     snap.data!,
+              //                   ),
+              //                 );
+              //               }),
+              //         );
+              //         //Container(width: 300,height: 450,
+              //         // child: Image.network(snap.data!,
+              //         // fit: BoxFit.cover,),
+
+              //       }
+              //       if (snap.connectionState == ConnectionState.waiting) {
+              //         return Center(child: CircularProgressIndicator());
+              //       }
+              //       return Container();
+              //     },
+              //   ),
+              // )
             ],
           ),
         ),
@@ -334,8 +331,3 @@ class _ChatUserState extends State<ChatUser> {
     );
   }
 }
-
-// class FirestorageService extends ChangeNotifier {
-//   FirestorageService();
-
-// }
