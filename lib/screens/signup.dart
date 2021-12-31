@@ -23,10 +23,15 @@ FirebaseAuth auth = FirebaseAuth.instance;
 var results;
 
 Future signup1(context) async {
-  if (results != "" &&
+  if (results != null &&
       emailcontroller.text != "" &&
       usernamecontroller.text != "" &&
       passwordcontroller.text != "") {
+    var folder = emailcontroller.text;
+    Storage storageobj = Storage();
+    var filename = results.files.single.name;
+    var pathname = results.files.single.path;
+    storageobj.uploadFile(pathname, folder, filename);
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
@@ -35,12 +40,16 @@ Future signup1(context) async {
         'email': emailcontroller.text,
         'username': usernamecontroller.text,
         'password': passwordcontroller.text,
-        'profile': results.files.single.path
+        'profile': "profile/" + folder + "/" + results.files.single.name
       });
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const Login()),
       );
+      emailcontroller.clear();
+      usernamecontroller.clear();
+      passwordcontroller.clear();
+      results = null;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
@@ -150,11 +159,7 @@ class _SignupState extends State<Signup> {
                       ),
                     );
                   }
-                  Storage storageobj = Storage();
-
-                  var filename = results.files.single.name;
                   var pathname = results.files.single.path;
-                  storageobj.uploadFile(pathname, filename);
                 },
                 child: CircleAvatar(
                   radius: 20,
@@ -198,6 +203,10 @@ class _SignupState extends State<Signup> {
                     InkWell(
                         onTap: () {
                           Navigator.pop(context);
+                          emailcontroller.clear();
+                          usernamecontroller.clear();
+                          passwordcontroller.clear();
+                          results = null;
                         },
                         child: Text(
                           " login",

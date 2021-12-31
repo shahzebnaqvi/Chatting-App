@@ -1,7 +1,8 @@
-import 'dart:async';
+import 'dart:io';
 
 import 'package:chattingapp/helper/stoarage_helper.dart';
 import 'package:chattingapp/screens/chatting.dart';
+import 'package:chattingapp/screens/login.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -41,6 +42,15 @@ class _ChatUserState extends State<ChatUser> {
     });
   }
 
+  signOut() async {
+    try {
+      return await FirebaseAuth.instance.signOut();
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     String currentuser = "${_auth.email}";
@@ -72,9 +82,24 @@ class _ChatUserState extends State<ChatUser> {
                               fontWeight: FontWeight.bold,
                               color: Colors.pink),
                         ),
-                        Icon(
-                          Icons.drag_indicator_sharp,
-                          color: Colors.pink,
+                        InkWell(
+                          onTap: () {
+                            signOut();
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Login()));
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(
+                                MediaQuery.of(context).size.width * 0.01),
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle, color: Colors.pink),
+                            child: Icon(
+                              Icons.drag_indicator_sharp,
+                              color: Colors.white,
+                            ),
+                          ),
                         )
                       ],
                     ),
@@ -222,8 +247,40 @@ class _ChatUserState extends State<ChatUser> {
                                 );
                               },
                               child: ListTile(
-                                leading: CircleAvatar(
-                                  child: Icon(Icons.beach_access),
+                                leading: Expanded(
+                                  child: FutureBuilder(
+                                    future: Storage()
+                                        .downloadedUrl('BMW-X1_ModelCard.png'),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<String> snap) {
+                                      if (snap.connectionState ==
+                                              ConnectionState.done &&
+                                          snap.hasData) {
+                                        return Expanded(
+                                          child: ListView.builder(
+                                              itemCount: snap.data!.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      index) {
+                                                return CircleAvatar(
+                                                    child: Image.network(
+                                                  snap.data!,
+                                                ));
+                                              }),
+                                        );
+                                        //Container(width: 300,height: 450,
+                                        // child: Image.network(snap.data!,
+                                        // fit: BoxFit.cover,),
+
+                                      }
+                                      if (snap.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Center(
+                                            child: CircularProgressIndicator());
+                                      }
+                                      return Container();
+                                    },
+                                  ),
                                 ),
                                 title: Text(
                                   data['username'],

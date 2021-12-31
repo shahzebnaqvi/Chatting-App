@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Chat extends StatefulWidget {
   const Chat(
@@ -33,6 +34,13 @@ addData(sender, receiver, chatRoom) async {
     'time': DateTime.now().millisecondsSinceEpoch,
   });
   msg.clear();
+}
+
+a(timeInMillis) {
+  var date = DateTime.fromMillisecondsSinceEpoch(timeInMillis);
+  var formattedDate = DateFormat.yMMMd().format(date);
+  var formattedtime = DateFormat.Hm().format(date);
+  return "${formattedtime}";
 }
 
 class _ChatState extends State<Chat> {
@@ -108,7 +116,8 @@ class _ChatState extends State<Chat> {
                                 : MediaQuery.of(context).size.width * 0.25,
                           ),
                           padding: EdgeInsets.only(
-                              bottom: MediaQuery.of(context).size.width * 0.05,
+                              bottom: MediaQuery.of(context).size.width * 0.01,
+                              right: MediaQuery.of(context).size.width * 0.01,
                               top: MediaQuery.of(context).size.width * 0.05),
                           decoration: BoxDecoration(
                             color: selectuser ? Colors.pink : Colors.white,
@@ -130,17 +139,40 @@ class _ChatState extends State<Chat> {
                           width: MediaQuery.of(context).size.width * 0.90,
                           child: Container(
                             padding: EdgeInsets.only(
-                                right: MediaQuery.of(context).size.width * 0.05,
+                                right: MediaQuery.of(context).size.width * 0.01,
                                 left: MediaQuery.of(context).size.width * 0.05),
-                            child: RichText(
-                              text: TextSpan(
-                                text: '${data['message']}',
-                                style: TextStyle(
-                                    color: selectuser
-                                        ? Colors.white
-                                        : Colors.black,
-                                    fontSize: 18.0),
-                              ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
+                                  text: TextSpan(
+                                    text: '${data['message']}',
+                                    style: TextStyle(
+                                        color: selectuser
+                                            ? Colors.white
+                                            : Colors.black,
+                                        fontSize: 18.0),
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Icon(
+                                      Icons.library_add_check_outlined,
+                                      size: 15,
+                                      color: selectuser
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                    Text(" ${a(data['time'])}",
+                                        style: TextStyle(
+                                            color: selectuser
+                                                ? Colors.white
+                                                : Colors.black,
+                                            fontSize: 13.0)),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
                         ),
