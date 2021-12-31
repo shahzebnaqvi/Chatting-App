@@ -23,7 +23,10 @@ FirebaseAuth auth = FirebaseAuth.instance;
 var results;
 
 Future signup1(context) async {
-  if (results.files.single.path != "") {
+  if (results != "" &&
+      emailcontroller.text != "" &&
+      usernamecontroller.text != "" &&
+      passwordcontroller.text != "") {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
