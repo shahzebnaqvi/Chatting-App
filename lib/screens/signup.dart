@@ -63,6 +63,7 @@ Future signup1(context) async {
 }
 
 class _SignupState extends State<Signup> {
+  bool _isObscure = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,6 +81,57 @@ class _SignupState extends State<Signup> {
                 height: 150,
                 width: MediaQuery.of(context).size.width,
               ),
+              Text(
+                "Join the Baatcheet",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              Stack(alignment: Alignment.bottomRight, children: [
+                if (results != null)
+                  CircleAvatar(
+                    radius: MediaQuery.of(context).size.width * 0.1,
+                    backgroundImage: FileImage(
+                      File(results.files.single.path),
+                    ),
+                  ),
+                InkWell(
+                  onTap: () async {
+                    results = await FilePicker.platform.pickFiles(
+                        type: FileType.custom,
+                        allowMultiple: false,
+                        allowedExtensions: ['pdf', 'jpg', 'png', 'jpeg']);
+                    setState(() {
+                      results = results;
+                    });
+                    if (results == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("content"),
+                        ),
+                      );
+                    }
+                    var pathname = results.files.single.path;
+                  },
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.pinkAccent,
+                    child: Icon(Icons.add),
+                  ),
+                ),
+              ]),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Text(
+                    "Email",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  )),
               Container(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: TextField(
@@ -88,7 +140,6 @@ class _SignupState extends State<Signup> {
                     contentPadding: EdgeInsets.all(10.0),
                     fillColor: Colors.pinkAccent,
                     filled: true,
-                    hintText: "Enter Email",
                     border: OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(3)),
@@ -100,7 +151,16 @@ class _SignupState extends State<Signup> {
                   controller: emailcontroller,
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Text(
+                    "Username",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  )),
               Container(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: TextField(
@@ -109,7 +169,6 @@ class _SignupState extends State<Signup> {
                     contentPadding: EdgeInsets.all(10.0),
                     fillColor: Colors.pinkAccent,
                     filled: true,
-                    hintText: "Enter Username",
                     border: OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(3)),
@@ -121,16 +180,36 @@ class _SignupState extends State<Signup> {
                   controller: usernamecontroller,
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Text(
+                    "Password",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  )),
               Container(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: TextField(
+                  obscureText: _isObscure,
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10.0),
                     fillColor: Colors.pinkAccent,
                     filled: true,
-                    hintText: "Enter Password",
+                    suffixIcon: IconButton(
+                        icon: Icon(
+                            _isObscure
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.white),
+                        onPressed: () {
+                          setState(() {
+                            _isObscure = !_isObscure;
+                          });
+                        }),
                     border: OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(3)),
@@ -142,38 +221,9 @@ class _SignupState extends State<Signup> {
                   controller: passwordcontroller,
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-              InkWell(
-                onTap: () async {
-                  results = await FilePicker.platform.pickFiles(
-                      type: FileType.custom,
-                      allowMultiple: false,
-                      allowedExtensions: ['pdf', 'jpg', 'png', 'jpeg']);
-                  setState(() {
-                    results = results;
-                  });
-                  if (results == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text("content"),
-                      ),
-                    );
-                  }
-                  var pathname = results.files.single.path;
-                },
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Colors.pinkAccent,
-                  child: Icon(Icons.add),
-                ),
+              SizedBox(
+                height: MediaQuery.of(context).size.width * 0.08,
               ),
-              if (results != null)
-                Container(
-                  width: MediaQuery.of(context).size.width * .4,
-                  child: Image.file(
-                    File(results.files.single.path),
-                  ),
-                ),
               Container(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: ElevatedButton(
@@ -192,13 +242,13 @@ class _SignupState extends State<Signup> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "Already hava an account ?",
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white, fontSize: 13),
                     ),
                     InkWell(
                         onTap: () {
@@ -211,7 +261,9 @@ class _SignupState extends State<Signup> {
                         child: Text(
                           " login",
                           style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                              color: Colors.white,
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold),
                         )),
                   ],
                 ),

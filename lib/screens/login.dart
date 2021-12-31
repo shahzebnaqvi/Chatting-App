@@ -36,6 +36,7 @@ Future login(context) async {
 }
 
 class _LoginState extends State<Login> {
+  bool _isObscure = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +54,23 @@ class _LoginState extends State<Login> {
                 height: 150,
                 width: MediaQuery.of(context).size.width,
               ),
+              Text(
+                "Welcome to Baatcheet",
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20),
+              ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.09),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Text(
+                    "Email",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  )),
               Container(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: TextField(
@@ -61,7 +79,6 @@ class _LoginState extends State<Login> {
                     contentPadding: EdgeInsets.all(10.0),
                     fillColor: Colors.pinkAccent,
                     filled: true,
-                    hintText: "Enter Email",
                     border: OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(3)),
@@ -73,16 +90,36 @@ class _LoginState extends State<Login> {
                   controller: emailcontrollerlogin,
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.04),
+              Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Text(
+                    "Password",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
+                  )),
               Container(
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: TextField(
+                  obscureText: _isObscure,
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10.0),
                     fillColor: Colors.pinkAccent,
                     filled: true,
-                    hintText: "Enter Password",
+                    suffixIcon: IconButton(
+                        icon: Icon(
+                            _isObscure
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            color: Colors.white),
+                        onPressed: () {
+                          setState(() {
+                            _isObscure = !_isObscure;
+                          });
+                        }),
                     border: OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.circular(3)),
@@ -95,7 +132,7 @@ class _LoginState extends State<Login> {
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.width * 0.06,
+                height: MediaQuery.of(context).size.width * 0.08,
               ),
               Container(
                 width: MediaQuery.of(context).size.width * 0.8,
@@ -114,13 +151,13 @@ class _LoginState extends State<Login> {
                     )),
               ),
               Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       "Didn't have account ?",
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(color: Colors.white, fontSize: 13),
                     ),
                     InkWell(
                         onTap: () {
@@ -133,7 +170,9 @@ class _LoginState extends State<Login> {
                         child: Text(
                           " create account",
                           style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13),
                         )),
                   ],
                 ),
