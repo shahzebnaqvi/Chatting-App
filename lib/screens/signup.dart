@@ -23,28 +23,30 @@ FirebaseAuth auth = FirebaseAuth.instance;
 var results;
 
 Future signup1(context) async {
-  try {
-    UserCredential userCredential = await FirebaseAuth.instance
-        .createUserWithEmailAndPassword(
-            email: emailcontroller.text, password: passwordcontroller.text);
-    await FirebaseFirestore.instance.collection("user_detail").add({
-      'email': emailcontroller.text,
-      'username': usernamecontroller.text,
-      'password': passwordcontroller.text,
-      'profile': results.files.single.path
-    });
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const Login()),
-    );
-  } on FirebaseAuthException catch (e) {
-    if (e.code == 'weak-password') {
-      print('The password provided is too weak.');
-    } else if (e.code == 'email-already-in-use') {
-      print('The account already exists for that email.');
+  if (results.files.single.path != "") {
+    try {
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: emailcontroller.text, password: passwordcontroller.text);
+      await FirebaseFirestore.instance.collection("user_detail").add({
+        'email': emailcontroller.text,
+        'username': usernamecontroller.text,
+        'password': passwordcontroller.text,
+        'profile': results.files.single.path
+      });
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const Login()),
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
     }
-  } catch (e) {
-    print(e);
   }
 }
 
