@@ -177,6 +177,27 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(primary: Colors.blue),
+                        onPressed: () {},
+                        icon: Icon(Icons.facebook),
+                        label: Text("Facebook")),
+                    ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(primary: Colors.white),
+                        onPressed: () {},
+                        icon: Icon(Icons.g_mobiledata, color: Colors.black),
+                        label: Text(
+                          "Google",
+                          style: TextStyle(color: Colors.black),
+                        )),
+                  ],
+                ),
+              )
             ],
           ),
         ),
