@@ -92,7 +92,7 @@ class _SignupState extends State<Signup> {
               Stack(alignment: Alignment.bottomRight, children: [
                 if (results != null)
                   CircleAvatar(
-                    radius: MediaQuery.of(context).size.width * 0.1,
+                    radius: MediaQuery.of(context).size.width * 0.12,
                     backgroundImage: FileImage(
                       File(results.files.single.path),
                     ),
@@ -116,9 +116,12 @@ class _SignupState extends State<Signup> {
                     var pathname = results.files.single.path;
                   },
                   child: CircleAvatar(
-                    radius: 20,
-                    backgroundColor: Colors.pinkAccent,
-                    child: Icon(Icons.add),
+                    radius: 15,
+                    backgroundColor: Colors.white,
+                    child: Icon(
+                      Icons.add,
+                      color: Colors.pink,
+                    ),
                   ),
                 ),
               ]),
