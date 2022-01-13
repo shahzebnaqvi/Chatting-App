@@ -247,9 +247,56 @@ class _ChatUserState extends State<ChatUser> {
                                 );
                               },
                               child: ListTile(
-                                leading: CircleAvatar(
-                                  child: Icon(Icons.beach_access),
+                                leading: SizedBox(
+                                  width: 50,
+                                  height: 50,
+                                  child: Expanded(
+                                    child: StreamBuilder(
+                                      stream: Storage().downloadedUrl(
+                                          'a@gmail.com/IMG_20220112_113426.jpg'),
+                                      builder: (context,
+                                          AsyncSnapshot<String> snap) {
+                                        if (snap.hasError) {
+                                          return Text("Error");
+                                        } else if (snap.connectionState ==
+                                                ConnectionState.done &&
+                                            snap.hasData) {
+                                          return Expanded(
+                                            child: ListView.builder(
+                                                itemCount: 1,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        index) {
+                                                  return Text(
+                                                    "${snap.data!}",
+                                                    style:
+                                                        TextStyle(fontSize: 7),
+                                                  );
+                                                  // CircleAvatar(
+                                                  //   backgroundImage: NetworkImage(
+                                                  //     snap.data!,
+                                                  //   ),
+                                                }),
+                                          );
+                                          //Container(width: 300,height: 450,
+                                          // child: Image.network(snap.data!,
+                                          // fit: BoxFit.cover,),
+
+                                        }
+                                        if (snap.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return Center(
+                                              child:
+                                                  CircularProgressIndicator());
+                                        }
+                                        return Container();
+                                      },
+                                    ),
+                                  ),
                                 ),
+                                //  CircleAvatar(
+                                //   child: Icon(Icons.beach_access),
+                                // ),
                                 title: Text(
                                   data['username'],
                                   style: TextStyle(
@@ -295,35 +342,40 @@ class _ChatUserState extends State<ChatUser> {
                   },
                 ),
               ),
-              // Expanded(
-              //   child: FutureBuilder(
-              //     future: Storage().downloadedUrl('BMW-X1_ModelCard.png'),
-              //     builder: (BuildContext context, AsyncSnapshot<String> snap) {
-              //       if (snap.connectionState == ConnectionState.done &&
-              //           snap.hasData) {
-              //         return Expanded(
-              //           child: ListView.builder(
-              //               itemCount: 1,
-              //               itemBuilder: (BuildContext context, index) {
-              //                 return CircleAvatar(
-              //                   backgroundImage: NetworkImage(
-              //                     snap.data!,
-              //                   ),
-              //                 );
-              //               }),
-              //         );
-              //         //Container(width: 300,height: 450,
-              //         // child: Image.network(snap.data!,
-              //         // fit: BoxFit.cover,),
+              //   Expanded(
+              //     child: FutureBuilder(
+              //       future: Storage()
+              //           .downloadedUrl('a@gmail.com/IMG_20220112_113426.jpg'),
+              //       builder: (BuildContext context, AsyncSnapshot<String> snap) {
+              //         if (snap.hasError) {
+              //           return Text("Error");
+              //         } else if (snap.connectionState == ConnectionState.done &&
+              //             snap.hasData) {
+              //           return Expanded(
+              //             child: ListView.builder(
+              //                 itemCount: 1,
+              //                 itemBuilder: (BuildContext context, index) {
+              //                   return Text(
+              //                     "${snap.data!}",
+              //                   );
+              //                   // CircleAvatar(
+              //                   //   backgroundImage: NetworkImage(
+              //                   //     snap.data!,
+              //                   //   ),
+              //                 }),
+              //           );
+              //           //Container(width: 300,height: 450,
+              //           // child: Image.network(snap.data!,
+              //           // fit: BoxFit.cover,),
 
-              //       }
-              //       if (snap.connectionState == ConnectionState.waiting) {
-              //         return Center(child: CircularProgressIndicator());
-              //       }
-              //       return Container();
-              //     },
-              //   ),
-              // )
+              //         }
+              //         if (snap.connectionState == ConnectionState.waiting) {
+              //           return Center(child: CircularProgressIndicator());
+              //         }
+              //         return Container();
+              //       },
+              //     ),
+              //   )
             ],
           ),
         ),
