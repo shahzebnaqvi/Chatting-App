@@ -243,57 +243,40 @@ class _ChatUserState extends State<ChatUser> {
                                           sendto: '${data['username']}',
                                           currentuseremail: currentuser,
                                           sendtoemail: '${data['email']}',
-                                          chatRoom: '$chatRoomId')),
+                                          chatRoom: '$chatRoomId',
+                                          profile: '${data['profile']}')),
                                 );
                               },
                               child: ListTile(
                                 leading: SizedBox(
                                   width: 50,
                                   height: 50,
-                                  child: Expanded(
-                                    child: StreamBuilder(
-                                      stream: Storage()
-                                          .downloadedUrl('${data['profile']}'),
-                                      builder: (context,
-                                          AsyncSnapshot<String> snap) {
-                                        if (snap.hasError) {
-                                          return Text("Error");
-                                        } else if (snap.connectionState ==
-                                                ConnectionState.done &&
-                                            snap.hasData) {
-                                          return Expanded(
-                                            child: ListView.builder(
-                                                itemCount: 1,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        index) {
-                                                  return
-                                                      //  Text(
-                                                      //   "${snap.data!}",
-                                                      //   style:
-                                                      //       TextStyle(fontSize: 7),
-                                                      // );
-                                                      CircleAvatar(
-                                                          backgroundImage:
-                                                              NetworkImage(
-                                                    snap.data!,
-                                                  ));
-                                                }),
-                                          );
-                                          //Container(width: 300,height: 450,
-                                          // child: Image.network(snap.data!,
-                                          // fit: BoxFit.cover,),
+                                  child: StreamBuilder(
+                                    stream: Storage()
+                                        .downloadedUrl('${data['profile']}'),
+                                    builder:
+                                        (context, AsyncSnapshot<String> snap) {
+                                      if (snap.hasError) {
+                                        return Text("Error");
+                                      } else if (snap.connectionState ==
+                                              ConnectionState.done &&
+                                          snap.hasData) {
+                                        return CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                          snap.data!,
+                                        ));
+                                        //Container(width: 300,height: 450,
+                                        // child: Image.network(snap.data!,
+                                        // fit: BoxFit.cover,),
 
-                                        }
-                                        if (snap.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return Center(
-                                              child:
-                                                  CircularProgressIndicator());
-                                        }
-                                        return Container();
-                                      },
-                                    ),
+                                      }
+                                      if (snap.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Center(
+                                            child: CircularProgressIndicator());
+                                      }
+                                      return Container();
+                                    },
                                   ),
                                 ),
                                 //  CircleAvatar(

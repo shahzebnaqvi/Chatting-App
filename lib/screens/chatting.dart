@@ -1,3 +1,4 @@
+import 'package:chattingapp/helper/stoarage_helper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -8,12 +9,14 @@ class Chat extends StatefulWidget {
       @required this.sendto,
       @required this.currentuseremail,
       @required this.sendtoemail,
-      @required this.chatRoom})
+      @required this.chatRoom,
+      @required this.profile})
       : super(key: key);
   final sendto;
   final currentuseremail;
   final sendtoemail;
   final chatRoom;
+  final profile;
   @override
   _ChatState createState() => _ChatState();
 }
@@ -53,8 +56,31 @@ class _ChatState extends State<Chat> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
-            child: CircleAvatar(
-              backgroundColor: Colors.amber,
+            child: SizedBox(
+              width: 50,
+              height: 50,
+              child: StreamBuilder(
+                stream: Storage().downloadedUrl('${widget.profile}'),
+                builder: (context, AsyncSnapshot<String> snap) {
+                  if (snap.hasError) {
+                    return Text("Error");
+                  } else if (snap.connectionState == ConnectionState.done &&
+                      snap.hasData) {
+                    return CircleAvatar(
+                        backgroundImage: NetworkImage(
+                      snap.data!,
+                    ));
+                    //Container(width: 300,height: 450,
+                    // child: Image.network(snap.data!,
+                    // fit: BoxFit.cover,),
+
+                  }
+                  if (snap.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  return Container();
+                },
+              ),
             ),
           ),
         ],
