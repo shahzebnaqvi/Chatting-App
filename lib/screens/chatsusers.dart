@@ -22,13 +22,13 @@ class _ChatUserState extends State<ChatUser> {
     if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
       print(a);
       print(b);
-      print("dsd");
-      return "$a\_$b";
+      print("asd");
+      return "$b\_$a";
     } else {
       print(a);
       print(b);
-      print("asd");
-      return "$b\_$a";
+      print("dsd");
+      return "$a\_$b";
     }
   }
 
@@ -103,68 +103,81 @@ class _ChatUserState extends State<ChatUser> {
                         )
                       ],
                     ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(
-                                MediaQuery.of(context).size.width * 0.01),
-                            child: CircleAvatar(
-                              radius: MediaQuery.of(context).size.width * 0.06,
-                            ),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.all(
+                              MediaQuery.of(context).size.width * 0.01),
+                          child: CircleAvatar(
+                            radius: MediaQuery.of(context).size.width * 0.06,
                           ),
-                          Padding(
-                            padding: EdgeInsets.all(
-                                MediaQuery.of(context).size.width * 0.01),
-                            child: CircleAvatar(
-                              radius: MediaQuery.of(context).size.width * 0.06,
-                            ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.73,
+                          height: 50,
+                          child: StreamBuilder<QuerySnapshot>(
+                            stream: FirebaseFirestore.instance
+                                .collection('user_detail')
+                                .where('email', isNotEqualTo: currentuser)
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (snapshot.hasError) {
+                                return Text("Error");
+                              }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(child: Text(""));
+                              }
+
+                              return ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: snapshot.data!.docs
+                                    .map((DocumentSnapshot document) {
+                                  Map<String, dynamic> data =
+                                      document.data()! as Map<String, dynamic>;
+                                  return Padding(
+                                      padding: EdgeInsets.all(
+                                          MediaQuery.of(context).size.width *
+                                              0.01),
+                                      child: SizedBox(
+                                          width: 50,
+                                          height: 50,
+                                          child: StreamBuilder(
+                                            stream: Storage().downloadedUrl(
+                                                '${data['profile']}'),
+                                            builder: (context,
+                                                AsyncSnapshot<String> snap) {
+                                              if (snap.hasError) {
+                                                return Text("Error");
+                                              } else if (snap.connectionState ==
+                                                      ConnectionState.done &&
+                                                  snap.hasData) {
+                                                return CircleAvatar(
+                                                    backgroundImage:
+                                                        NetworkImage(
+                                                  snap.data!,
+                                                ));
+                                                //Container(width: 300,height: 450,
+                                                // child: Image.network(snap.data!,
+                                                // fit: BoxFit.cover,),
+
+                                              }
+                                              if (snap.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return Center(
+                                                    child:
+                                                        CircularProgressIndicator());
+                                              }
+                                              return Container();
+                                            },
+                                          )));
+                                }).toList(),
+                              );
+                            },
                           ),
-                          Padding(
-                            padding: EdgeInsets.all(
-                                MediaQuery.of(context).size.width * 0.01),
-                            child: CircleAvatar(
-                              radius: MediaQuery.of(context).size.width * 0.06,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(
-                                MediaQuery.of(context).size.width * 0.01),
-                            child: CircleAvatar(
-                              radius: MediaQuery.of(context).size.width * 0.06,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(
-                                MediaQuery.of(context).size.width * 0.01),
-                            child: CircleAvatar(
-                              radius: MediaQuery.of(context).size.width * 0.06,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(
-                                MediaQuery.of(context).size.width * 0.01),
-                            child: CircleAvatar(
-                              radius: MediaQuery.of(context).size.width * 0.06,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(
-                                MediaQuery.of(context).size.width * 0.01),
-                            child: CircleAvatar(
-                              radius: MediaQuery.of(context).size.width * 0.06,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.all(
-                                MediaQuery.of(context).size.width * 0.01),
-                            child: CircleAvatar(
-                              radius: MediaQuery.of(context).size.width * 0.06,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                     Container(
                       padding: EdgeInsets.only(
