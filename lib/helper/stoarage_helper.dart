@@ -16,6 +16,11 @@ class Storage {
   // static Future<dynamic> LoadImage(BuildContext, String image) async {
   //   return await FirebaseStorage.instance.ref().child(image).getDownloadURL();
   // }
+  Future<String> downloadedUrlsingle(String imageName) async {
+    String downloadedUrl = await storage.ref('$imageName').getDownloadURL();
+    return downloadedUrl;
+  }
+
   Stream<String> downloadedUrl(String imageName) async* {
     String downloadedUrl = await storage.ref('$imageName').getDownloadURL();
     // 'profile/a@gmail.com/$imageName'
