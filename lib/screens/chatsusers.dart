@@ -252,8 +252,8 @@ class _ChatUserState extends State<ChatUser> {
                                   height: 50,
                                   child: Expanded(
                                     child: StreamBuilder(
-                                      stream: Storage().downloadedUrl(
-                                          'a@gmail.com/IMG_20220112_113426.jpg'),
+                                      stream: Storage()
+                                          .downloadedUrl('${data['profile']}'),
                                       builder: (context,
                                           AsyncSnapshot<String> snap) {
                                         if (snap.hasError) {
@@ -267,15 +267,17 @@ class _ChatUserState extends State<ChatUser> {
                                                 itemBuilder:
                                                     (BuildContext context,
                                                         index) {
-                                                  return Text(
-                                                    "${snap.data!}",
-                                                    style:
-                                                        TextStyle(fontSize: 7),
-                                                  );
-                                                  // CircleAvatar(
-                                                  //   backgroundImage: NetworkImage(
-                                                  //     snap.data!,
-                                                  //   ),
+                                                  return
+                                                      //  Text(
+                                                      //   "${snap.data!}",
+                                                      //   style:
+                                                      //       TextStyle(fontSize: 7),
+                                                      // );
+                                                      CircleAvatar(
+                                                          backgroundImage:
+                                                              NetworkImage(
+                                                    snap.data!,
+                                                  ));
                                                 }),
                                           );
                                           //Container(width: 300,height: 450,

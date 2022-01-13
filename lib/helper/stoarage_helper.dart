@@ -17,8 +17,7 @@ class Storage {
   //   return await FirebaseStorage.instance.ref().child(image).getDownloadURL();
   // }
   Stream<String> downloadedUrl(String imageName) async* {
-    String downloadedUrl =
-        await storage.ref('profile/$imageName').getDownloadURL();
+    String downloadedUrl = await storage.ref('$imageName').getDownloadURL();
     // 'profile/a@gmail.com/$imageName'
     yield downloadedUrl;
   }
