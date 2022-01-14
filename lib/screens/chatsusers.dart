@@ -110,6 +110,8 @@ class _ChatUserState extends State<ChatUser> {
                               MediaQuery.of(context).size.width * 0.01),
                           child: CircleAvatar(
                             radius: MediaQuery.of(context).size.width * 0.06,
+                            backgroundColor: Colors.pink,
+                            child: Icon(Icons.add),
                           ),
                         ),
                         SizedBox(

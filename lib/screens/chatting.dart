@@ -1,4 +1,5 @@
 import 'package:chattingapp/helper/stoarage_helper.dart';
+import 'package:chattingapp/screens/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -66,10 +67,20 @@ class _ChatState extends State<Chat> {
                     return Text("Error");
                   } else if (snap.connectionState == ConnectionState.done &&
                       snap.hasData) {
-                    return CircleAvatar(
-                        backgroundImage: NetworkImage(
-                      snap.data!,
-                    ));
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Profile(
+                                    profile: '${widget.profile}',
+                                    profileimg: '${snap.data!}')));
+                      },
+                      child: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                        snap.data!,
+                      )),
+                    );
                     //Container(width: 300,height: 450,
                     // child: Image.network(snap.data!,
                     // fit: BoxFit.cover,),
