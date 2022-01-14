@@ -20,26 +20,54 @@ class _ChatUserState extends State<ChatUser> {
   final _auth = FirebaseAuth.instance.currentUser!;
   getChatRoomId(String a, String b) {
     if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
+      String first = a + "_" + b;
+      String second = b + "_" + a;
+      print(first);
+      print(second);
       print(a);
       print(b);
       print("asd");
-      return "$b\_$a";
+      return "$a\_$b";
     } else {
       print(a);
       print(b);
       print("dsd");
-      return "$a\_$b";
+      return "$b\_$a";
     }
   }
 
-  addData(chatRoomId, chatRoom) async {
-    await FirebaseFirestore.instance
-        .collection("chatRoom")
-        .doc(chatRoomId)
-        .set(chatRoom)
-        .catchError((e) {
-      print(e);
-    });
+  addData(chatRoomId, chatRoom, currentuser, usertosend) async {
+    CollectionReference _collectionRef =
+        FirebaseFirestore.instance.collection('chatRoom');
+
+    Future<void> getData() async {
+      // Get docs from collection reference
+      QuerySnapshot querySnapshot = await _collectionRef.get();
+
+      // Get data from docs and convert map to List
+      final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+      if (allData.toString().contains("${currentuser}_${usertosend}") ==
+              false &&
+          allData.toString().contains("${usertosend}_${currentuser}") ==
+              false) {
+        await FirebaseFirestore.instance
+            .collection("chatRoom")
+            .doc(chatRoomId)
+            .set(chatRoom)
+            .catchError((e) {
+          print(e);
+        });
+      }
+      // print(allData.toString().contains("${currentuser}_${usertosend}"));
+      // print(allData.toString().contains("${usertosend}_${currentuser}"));
+      // for (var fruit in allData) {
+      // print(fruit.toString().contains("${currentuser}_${usertosend}"));
+      // print(fruit.toString().contains("${usertosend}_${currentuser}"));
+      // }
+      // print(allData);
+    }
+
+    getData();
   }
 
   signOut() async {
@@ -250,7 +278,8 @@ class _ChatUserState extends State<ChatUser> {
                                   "users": users,
                                   "chatRoomId": chatRoomId,
                                 };
-                                addData(chatRoomId, chatRoom);
+                                addData(chatRoomId, chatRoom, currentuser,
+                                    '${data['email']}');
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
