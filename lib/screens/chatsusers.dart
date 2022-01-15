@@ -19,7 +19,8 @@ class _ChatUserState extends State<ChatUser> {
   final Storage storageobj = Storage();
   final _auth = FirebaseAuth.instance.currentUser!;
   getChatRoomId(String a, String b) {
-    if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)) {
+    // a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0)
+    if (true) {
       String first = a + "_" + b;
       String second = b + "_" + a;
       print(first);
@@ -36,20 +37,27 @@ class _ChatUserState extends State<ChatUser> {
     }
   }
 
-  addData(chatRoomId, chatRoom, currentuser, usertosend) async {
+  String chatRoomId = "";
+
+  addData(currentuser, usertosend) async {
     CollectionReference _collectionRef =
         FirebaseFirestore.instance.collection('chatRoom');
 
     Future<void> getData() async {
-      // Get docs from collection reference
       QuerySnapshot querySnapshot = await _collectionRef.get();
-
-      // Get data from docs and convert map to List
       final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-      if (allData.toString().contains("${currentuser}_${usertosend}") ==
+      if ((allData.toString().contains("${currentuser}_${usertosend}")) ==
               false &&
-          allData.toString().contains("${usertosend}_${currentuser}") ==
+          (allData.toString().contains("${usertosend}_${currentuser}")) ==
               false) {
+        print("true");
+        List<String> users = [currentuser, usertosend];
+
+        chatRoomId = getChatRoomId(currentuser, usertosend);
+        Map<String, dynamic> chatRoom = {
+          "users": users,
+          "chatRoomId": chatRoomId,
+        };
         await FirebaseFirestore.instance
             .collection("chatRoom")
             .doc(chatRoomId)
@@ -57,17 +65,26 @@ class _ChatUserState extends State<ChatUser> {
             .catchError((e) {
           print(e);
         });
+      } else if ((allData
+              .toString()
+              .contains("${currentuser}_${usertosend}")) ==
+          true) {
+        setState(() {
+          chatRoomId = "${currentuser}_${usertosend}";
+        });
+      } else if ((allData
+              .toString()
+              .contains("${usertosend}_${currentuser}")) ==
+          true) {
+        setState(() {
+          chatRoomId = "${usertosend}_${currentuser}";
+        });
       }
-      // print(allData.toString().contains("${currentuser}_${usertosend}"));
-      // print(allData.toString().contains("${usertosend}_${currentuser}"));
-      // for (var fruit in allData) {
-      // print(fruit.toString().contains("${currentuser}_${usertosend}"));
-      // print(fruit.toString().contains("${usertosend}_${currentuser}"));
-      // }
-      // print(allData);
+      print(chatRoomId);
     }
 
     getData();
+    // print(chatRoomId);
   }
 
   signOut() async {
@@ -267,19 +284,7 @@ class _ChatUserState extends State<ChatUser> {
                           return Container(
                             child: InkWell(
                               onTap: () {
-                                List<String> users = [
-                                  currentuser,
-                                  '${data['email']}'
-                                ];
-
-                                String chatRoomId = getChatRoomId(
-                                    currentuser, '${data['email']}');
-                                Map<String, dynamic> chatRoom = {
-                                  "users": users,
-                                  "chatRoomId": chatRoomId,
-                                };
-                                addData(chatRoomId, chatRoom, currentuser,
-                                    '${data['email']}');
+                                addData(currentuser, '${data['email']}');
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
