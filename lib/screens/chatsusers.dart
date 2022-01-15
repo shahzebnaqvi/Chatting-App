@@ -48,39 +48,10 @@ class _ChatUserState extends State<ChatUser> {
     Future<void> getData() async {
       QuerySnapshot querySnapshot = await _collectionRef.get();
       final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-      if ((allData.toString().contains("${currentuser}_${usertosend}")) ==
-          true) {
-        setState(() {
-          chatRoomId = "${currentuser}_${usertosend}";
-        });
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Chat(
-                  sendto: sendto,
-                  currentuseremail: currentuser,
-                  sendtoemail: chatRoomId = "${currentuser}_${usertosend}",
-                  chatRoom: chatRoomId,
-                  profile: profiledata)),
-        );
-      } else if ((allData
-              .toString()
-              .contains("${usertosend}_${currentuser}")) ==
-          true) {
-        setState(() {
-          chatRoomId = "${usertosend}_${currentuser}";
-        });
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => Chat(
-                  sendto: sendto,
-                  currentuseremail: currentuser,
-                  sendtoemail: chatRoomId = "${currentuser}_${usertosend}",
-                  chatRoom: chatRoomId,
-                  profile: profiledata)),
-        );
-      } else {
+      if (allData.toString().contains("${currentuser}_${usertosend}") ==
+              false &&
+          allData.toString().contains("${usertosend}_${currentuser}") ==
+              false) {
         print("true");
         List<String> users = [currentuser, usertosend];
 
@@ -102,7 +73,41 @@ class _ChatUserState extends State<ChatUser> {
               builder: (context) => Chat(
                   sendto: sendto,
                   currentuseremail: currentuser,
-                  sendtoemail: chatRoomId = "${currentuser}_${usertosend}",
+                  sendtoemail: usertosend,
+                  chatRoom: chatRoomId,
+                  profile: profiledata)),
+        );
+      } else if ((allData
+              .toString()
+              .contains("${currentuser}_${usertosend}")) ==
+          true) {
+        setState(() {
+          chatRoomId = "${currentuser}_${usertosend}";
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Chat(
+                  sendto: sendto,
+                  currentuseremail: currentuser,
+                  sendtoemail: usertosend,
+                  chatRoom: chatRoomId,
+                  profile: profiledata)),
+        );
+      } else if ((allData
+              .toString()
+              .contains("${usertosend}_${currentuser}")) ==
+          true) {
+        setState(() {
+          chatRoomId = "${usertosend}_${currentuser}";
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Chat(
+                  sendto: sendto,
+                  currentuseremail: currentuser,
+                  sendtoemail: usertosend,
                   chatRoom: chatRoomId,
                   profile: profiledata)),
         );
