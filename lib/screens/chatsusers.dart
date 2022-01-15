@@ -39,7 +39,9 @@ class _ChatUserState extends State<ChatUser> {
 
   String chatRoomId = "";
 
-  addData(currentuser, usertosend) async {
+  addData(context, currentuser, usertosend, sendto, profiledata) async {
+    chatRoomId = "${currentuser}_${usertosend}";
+
     CollectionReference _collectionRef =
         FirebaseFirestore.instance.collection('chatRoom');
 
@@ -47,9 +49,38 @@ class _ChatUserState extends State<ChatUser> {
       QuerySnapshot querySnapshot = await _collectionRef.get();
       final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
       if ((allData.toString().contains("${currentuser}_${usertosend}")) ==
-              false &&
-          (allData.toString().contains("${usertosend}_${currentuser}")) ==
-              false) {
+          true) {
+        setState(() {
+          chatRoomId = "${currentuser}_${usertosend}";
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Chat(
+                  sendto: sendto,
+                  currentuseremail: currentuser,
+                  sendtoemail: chatRoomId = "${currentuser}_${usertosend}",
+                  chatRoom: chatRoomId,
+                  profile: profiledata)),
+        );
+      } else if ((allData
+              .toString()
+              .contains("${usertosend}_${currentuser}")) ==
+          true) {
+        setState(() {
+          chatRoomId = "${usertosend}_${currentuser}";
+        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Chat(
+                  sendto: sendto,
+                  currentuseremail: currentuser,
+                  sendtoemail: chatRoomId = "${currentuser}_${usertosend}",
+                  chatRoom: chatRoomId,
+                  profile: profiledata)),
+        );
+      } else {
         print("true");
         List<String> users = [currentuser, usertosend];
 
@@ -65,20 +96,16 @@ class _ChatUserState extends State<ChatUser> {
             .catchError((e) {
           print(e);
         });
-      } else if ((allData
-              .toString()
-              .contains("${currentuser}_${usertosend}")) ==
-          true) {
-        setState(() {
-          chatRoomId = "${currentuser}_${usertosend}";
-        });
-      } else if ((allData
-              .toString()
-              .contains("${usertosend}_${currentuser}")) ==
-          true) {
-        setState(() {
-          chatRoomId = "${usertosend}_${currentuser}";
-        });
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Chat(
+                  sendto: sendto,
+                  currentuseremail: currentuser,
+                  sendtoemail: chatRoomId = "${currentuser}_${usertosend}",
+                  chatRoom: chatRoomId,
+                  profile: profiledata)),
+        );
       }
       print(chatRoomId);
     }
@@ -284,17 +311,12 @@ class _ChatUserState extends State<ChatUser> {
                           return Container(
                             child: InkWell(
                               onTap: () {
-                                addData(currentuser, '${data['email']}');
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => Chat(
-                                          sendto: '${data['username']}',
-                                          currentuseremail: currentuser,
-                                          sendtoemail: '${data['email']}',
-                                          chatRoom: '$chatRoomId',
-                                          profile: '${data['profile']}')),
-                                );
+                                addData(
+                                    context,
+                                    currentuser,
+                                    '${data['email']}',
+                                    '${data['username']}',
+                                    '${data['profile']}');
                               },
                               child: ListTile(
                                 leading: SizedBox(

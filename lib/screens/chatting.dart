@@ -97,9 +97,9 @@ class _ChatState extends State<Chat> {
         ],
         title: Center(
           child: Text(
-            "${widget.sendto}",
+            "${widget.chatRoom}",
             style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.pink),
+                fontSize: 13, fontWeight: FontWeight.bold, color: Colors.pink),
           ),
         ),
         leadingWidth: MediaQuery.of(context).size.width * 0.2,
