@@ -77,9 +77,10 @@ class _ChatState extends State<Chat> {
                                     profileimg: '${snap.data!}')));
                       },
                       child: CircleAvatar(
+                          backgroundColor: Colors.purple,
                           backgroundImage: NetworkImage(
-                        snap.data!,
-                      )),
+                            snap.data!,
+                          )),
                     );
                     //Container(width: 300,height: 450,
                     // child: Image.network(snap.data!,
@@ -87,7 +88,11 @@ class _ChatState extends State<Chat> {
 
                   }
                   if (snap.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return CircleAvatar(
+                        backgroundColor: Colors.purple,
+                        backgroundImage: AssetImage(
+                          "assets/images/default.jpeg",
+                        ));
                   }
                   return Container();
                 },
@@ -99,13 +104,15 @@ class _ChatState extends State<Chat> {
           child: Text(
             "${widget.sendto}",
             style: TextStyle(
-                fontSize: 13, fontWeight: FontWeight.bold, color: Colors.pink),
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                color: Colors.purple),
           ),
         ),
         leadingWidth: MediaQuery.of(context).size.width * 0.2,
         leading: InkWell(
             onTap: () => Navigator.pop(context),
-            child: Icon(Icons.arrow_back_outlined, color: Colors.pink)),
+            child: Icon(Icons.arrow_back_outlined, color: Colors.purple)),
       ),
       body: Center(
         child: Column(
@@ -157,7 +164,7 @@ class _ChatState extends State<Chat> {
                               right: MediaQuery.of(context).size.width * 0.01,
                               top: MediaQuery.of(context).size.width * 0.05),
                           decoration: BoxDecoration(
-                            color: selectuser ? Colors.pink : Colors.white,
+                            color: selectuser ? Colors.purple : Colors.white,
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(10),
                                 topRight: Radius.circular(10),
@@ -262,12 +269,12 @@ class _ChatState extends State<Chat> {
                                 borderRadius: BorderRadius.circular(25.7)),
                             suffixIcon: Icon(
                               Icons.mic,
-                              color: Colors.pink,
+                              color: Colors.purple,
                             ),
                             hintText: 'Type a message',
                             prefixIcon: Icon(
                               Icons.face,
-                              color: Colors.pink,
+                              color: Colors.purple,
                             ))),
                   ),
                   InkWell(
@@ -280,7 +287,7 @@ class _ChatState extends State<Chat> {
                         }
                       },
                       child: CircleAvatar(
-                        backgroundColor: Colors.pink,
+                        backgroundColor: Colors.purple,
                         child: Icon(
                           Icons.send,
                           color: Colors.white,

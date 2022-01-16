@@ -41,7 +41,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-      color: Colors.pink,
+      color: Colors.purple,
       child: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -77,7 +77,7 @@ class _LoginState extends State<Login> {
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10.0),
-                    fillColor: Colors.pinkAccent,
+                    fillColor: Colors.purpleAccent,
                     filled: true,
                     border: OutlineInputBorder(
                         borderSide: BorderSide.none,
@@ -107,7 +107,7 @@ class _LoginState extends State<Login> {
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10.0),
-                    fillColor: Colors.pinkAccent,
+                    fillColor: Colors.purpleAccent,
                     filled: true,
                     suffixIcon: IconButton(
                         icon: Icon(
@@ -147,7 +147,7 @@ class _LoginState extends State<Login> {
                     },
                     child: Text(
                       "Login",
-                      style: TextStyle(color: Colors.pink),
+                      style: TextStyle(color: Colors.purple),
                     )),
               ),
               Padding(

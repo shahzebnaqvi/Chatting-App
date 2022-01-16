@@ -68,7 +68,7 @@ class _SignupState extends State<Signup> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-      color: Colors.pink,
+      color: Colors.purple,
       child: Center(
         child: SingleChildScrollView(
           child: Column(
@@ -120,7 +120,7 @@ class _SignupState extends State<Signup> {
                     backgroundColor: Colors.white,
                     child: Icon(
                       Icons.add,
-                      color: Colors.pink,
+                      color: Colors.purple,
                     ),
                   ),
                 ),
@@ -141,7 +141,7 @@ class _SignupState extends State<Signup> {
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10.0),
-                    fillColor: Colors.pinkAccent,
+                    fillColor: Colors.purpleAccent,
                     filled: true,
                     border: OutlineInputBorder(
                         borderSide: BorderSide.none,
@@ -170,7 +170,7 @@ class _SignupState extends State<Signup> {
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10.0),
-                    fillColor: Colors.pinkAccent,
+                    fillColor: Colors.purpleAccent,
                     filled: true,
                     border: OutlineInputBorder(
                         borderSide: BorderSide.none,
@@ -200,7 +200,7 @@ class _SignupState extends State<Signup> {
                   style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(10.0),
-                    fillColor: Colors.pinkAccent,
+                    fillColor: Colors.purpleAccent,
                     filled: true,
                     suffixIcon: IconButton(
                         icon: Icon(
@@ -235,7 +235,7 @@ class _SignupState extends State<Signup> {
                   },
                   child: Text(
                     "Signup",
-                    style: TextStyle(color: Colors.pink),
+                    style: TextStyle(color: Colors.purple),
                   ),
                   style: ElevatedButton.styleFrom(
                       primary: Colors.white,

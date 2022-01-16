@@ -20,7 +20,7 @@ class _ProfileState extends State<Profile> {
           onTap: () => Navigator.pop(context),
           child: Icon(
             Icons.arrow_back,
-            color: Colors.pink,
+            color: Colors.purple,
           ),
         ),
         backgroundColor: Colors.transparent,
@@ -77,28 +77,48 @@ class _ProfileState extends State<Profile> {
                             .map((DocumentSnapshot document) {
                           Map<String, dynamic> data =
                               document.data()! as Map<String, dynamic>;
-                          return Column(children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "${data['username']}",
-                                style: TextStyle(
-                                    fontSize: 17, fontWeight: FontWeight.bold),
+                          return Container(
+                            margin: EdgeInsets.all(
+                                MediaQuery.of(context).size.width * 0.020),
+                            color: Colors.purple,
+                            child: Column(children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "${data['username']}",
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                "${data['email']}",
-                                style: TextStyle(
-                                    fontSize: 17, fontWeight: FontWeight.bold),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  "${data['email']}",
+                                  style: TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white),
+                                ),
                               ),
-                            ),
-                          ]);
+                            ]),
+                          );
                         }).toList(),
                       ),
                     );
                   },
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: InkWell(
+                onTap: () => Navigator.pop(context),
+                child: Icon(
+                  Icons.message,
+                  color: Colors.purple,
+                  size: 40,
                 ),
               ),
             ),
@@ -125,7 +145,7 @@ class _ImageprofileState extends State<Imageprofile> {
           onTap: () => Navigator.pop(context),
           child: Icon(
             Icons.arrow_back,
-            color: Colors.pink,
+            color: Colors.purple,
           ),
         ),
         backgroundColor: Colors.black,

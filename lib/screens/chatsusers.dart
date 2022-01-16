@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:chattingapp/helper/stoarage_helper.dart';
 import 'package:chattingapp/screens/chatting.dart';
 import 'package:chattingapp/screens/login.dart';
+import 'package:chattingapp/screens/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -16,6 +17,8 @@ class ChatUser extends StatefulWidget {
 }
 
 class _ChatUserState extends State<ChatUser> {
+  String imageurl = "";
+  String currentuser = "";
   final Storage storageobj = Storage();
   final _auth = FirebaseAuth.instance.currentUser!;
   getChatRoomId(String a, String b) {
@@ -132,13 +135,69 @@ class _ChatUserState extends State<ChatUser> {
   Widget build(BuildContext context) {
     String currentuser = "${_auth.email}";
     return Scaffold(
+      endDrawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                image: AssetImage("assets/images/default.jpeg"),
+                fit: BoxFit.cover,
+              )),
+              child: Text(
+                'Drawer Header',
+                style: TextStyle(
+                  color: Colors.purple,
+                  fontSize: 12,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.message),
+              title: Text('Messages'),
+            ),
+            ListTile(
+              leading: Icon(Icons.account_circle),
+              title: Text('Profile'),
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Settings'),
+            ),
+            InkWell(
+              onTap: () {
+                signOut();
+                Navigator.pushReplacement(
+                    context, MaterialPageRoute(builder: (context) => Login()));
+              },
+              child: ListTile(
+                leading: Icon(Icons.logout),
+                title: Text('Logout'),
+              ),
+            ),
+          ],
+        ),
+      ),
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.purple),
+        elevation: 0,
+        backgroundColor: Colors.grey[300],
+        title: Text(
+          "Messages",
+          style: TextStyle(
+              fontSize: 20, fontWeight: FontWeight.bold, color: Colors.purple),
+        ),
+      ),
       body: Center(
         child: SafeArea(
           child: Column(
             children: [
               Container(
-                padding:
-                    EdgeInsets.all(MediaQuery.of(context).size.width * 0.06),
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).size.width * 0.06,
+                    left: MediaQuery.of(context).size.width * 0.06,
+                    right: MediaQuery.of(context).size.width * 0.06),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(
@@ -150,44 +209,15 @@ class _ChatUserState extends State<ChatUser> {
                 child: Column(
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Messages",
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.pink),
-                        ),
-                        InkWell(
-                          onTap: () {
-                            signOut();
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Login()));
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(
-                                MediaQuery.of(context).size.width * 0.01),
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle, color: Colors.pink),
-                            child: Icon(
-                              Icons.drag_indicator_sharp,
-                              color: Colors.white,
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.all(
-                              MediaQuery.of(context).size.width * 0.01),
+                          padding: EdgeInsets.only(
+                              bottom: MediaQuery.of(context).size.width * 0.01,
+                              right: MediaQuery.of(context).size.width * 0.01,
+                              left: MediaQuery.of(context).size.width * 0.01),
                           child: CircleAvatar(
                             radius: MediaQuery.of(context).size.width * 0.06,
-                            backgroundColor: Colors.pink,
+                            backgroundColor: Colors.purple,
                             child: Icon(Icons.add),
                           ),
                         ),
@@ -216,41 +246,55 @@ class _ChatUserState extends State<ChatUser> {
                                   Map<String, dynamic> data =
                                       document.data()! as Map<String, dynamic>;
                                   return Padding(
-                                      padding: EdgeInsets.all(
-                                          MediaQuery.of(context).size.width *
-                                              0.01),
-                                      child: SizedBox(
-                                          width: 50,
-                                          height: 50,
-                                          child: StreamBuilder(
-                                            stream: Storage().downloadedUrl(
-                                                '${data['profile']}'),
-                                            builder: (context,
-                                                AsyncSnapshot<String> snap) {
-                                              if (snap.hasError) {
-                                                return Text("Error");
-                                              } else if (snap.connectionState ==
-                                                      ConnectionState.done &&
-                                                  snap.hasData) {
-                                                return CircleAvatar(
-                                                    backgroundImage:
-                                                        NetworkImage(
-                                                  snap.data!,
-                                                ));
-                                                //Container(width: 300,height: 450,
-                                                // child: Image.network(snap.data!,
-                                                // fit: BoxFit.cover,),
+                                    padding: EdgeInsets.all(
+                                        MediaQuery.of(context).size.width *
+                                            0.01),
+                                    child: SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child: StreamBuilder(
+                                        stream: Storage().downloadedUrl(
+                                            '${data['profile']}'),
+                                        builder: (context,
+                                            AsyncSnapshot<String> snap) {
+                                          if (snap.hasError) {
+                                            return Text("Error");
+                                          } else if (snap.connectionState ==
+                                                  ConnectionState.done &&
+                                              snap.hasData) {
+                                            return InkWell(
+                                              onTap: () => Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          Imageprofile(
+                                                              profileimage:
+                                                                  '${snap.data!}'))),
+                                              child: CircleAvatar(
+                                                  backgroundColor:
+                                                      Colors.purple,
+                                                  backgroundImage: NetworkImage(
+                                                    snap.data!,
+                                                  )),
+                                            );
+                                            //Container(width: 300,height: 450,
+                                            // child: Image.network(snap.data!,
+                                            // fit: BoxFit.cover,),
 
-                                              }
-                                              if (snap.connectionState ==
-                                                  ConnectionState.waiting) {
-                                                return Center(
-                                                    child:
-                                                        CircularProgressIndicator());
-                                              }
-                                              return Container();
-                                            },
-                                          )));
+                                          }
+                                          if (snap.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return CircleAvatar(
+                                                backgroundColor: Colors.purple,
+                                                backgroundImage: AssetImage(
+                                                  "assets/images/default.jpeg",
+                                                ));
+                                          }
+                                          return Container();
+                                        },
+                                      ),
+                                    ),
+                                  );
                                 }).toList(),
                               );
                             },
@@ -277,7 +321,7 @@ class _ChatUserState extends State<ChatUser> {
                           suffixText: 'Go',
                           prefixIcon: const Icon(
                             Icons.search,
-                            color: Colors.pink,
+                            color: Colors.purple,
                           ),
                         ),
                       ),
@@ -338,9 +382,10 @@ class _ChatUserState extends State<ChatUser> {
                                               ConnectionState.done &&
                                           snap.hasData) {
                                         return CircleAvatar(
+                                            backgroundColor: Colors.purple,
                                             backgroundImage: NetworkImage(
-                                          snap.data!,
-                                        ));
+                                              snap.data!,
+                                            ));
                                         //Container(width: 300,height: 450,
                                         // child: Image.network(snap.data!,
                                         // fit: BoxFit.cover,),
@@ -348,8 +393,11 @@ class _ChatUserState extends State<ChatUser> {
                                       }
                                       if (snap.connectionState ==
                                           ConnectionState.waiting) {
-                                        return Center(
-                                            child: CircularProgressIndicator());
+                                        return CircleAvatar(
+                                            backgroundColor: Colors.purple,
+                                            backgroundImage: AssetImage(
+                                              "assets/images/default.jpeg",
+                                            ));
                                       }
                                       return Container();
                                     },
